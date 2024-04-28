@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Board {
@@ -18,7 +19,7 @@ public class Board {
     public Square getSquareAtIndex(int location) {
         return allSquares.get(location);
     }
-/*
+
     private void initializeSquares() {
         String[] squareNames = {
                 "Go",
@@ -47,5 +48,7 @@ public class Board {
         this.add(square0);
         allSquares.add(square0);
         unbuyableSquares.add(square0);
-    } */
+    }
+
+
 }
