@@ -117,19 +117,24 @@ public class Player extends JPanel {
 
     // Flyttar spelaren på spelbrädet
     public void move(int dicesTotal) {
+
+        // Om spelaren hamnar på eller passerar start får den 200 som belöning
         if(currentSquareNumber + dicesTotal > 19) {
             depositToWallet(200);
         }
 
+        // Beräknar målrutan efter att spelaren har flyttat
         int targetSquare = (currentSquareNumber + dicesTotal) % 20;
         currentSquareNumber = targetSquare;
 
+        // Flyttar spelaren till den nya målrutan baserat på vilken spelare som spelar
         if(Game.nowPlaying == 0) {
             this.setLocation(xLocationsOfPlayer1[targetSquare], yLocationsOfPlayer1[targetSquare]);
         } else {
             this.setLocation(xLocationsOfPlayer2[targetSquare], yLocationsOfPlayer2[targetSquare]);
         }
 
+        // Uppdaterar informationen i infokonsolen om den nya rutan tillhör en anna spelare
         if(ledger.containsKey(this.getCurrentSquareNumber())) {
             Game.infoConsole.setText("Denna egenskap tillhör spelaren " + ledger.get(this.getCurrentSquareNumber()));
         }

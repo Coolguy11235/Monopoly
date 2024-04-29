@@ -126,9 +126,11 @@ public class Game extends JFrame {
         btnRollDice = new JButton("Kasta tärning");
         btnRollDice.addActionListener(new ActionListener() {
             @Override
+            // Hanterar händelsen när knappen för att kasta tärning klickas
             public void actionPerformed(ActionEvent e) {
                 // Spelarens 1 tur
                 if(nowPlaying == 0) {
+                    // Slår tärningarna och beräknar totala antalet prickar
                     int dice1OldValue = dice1.getFaceValue();
                     int dice2OldValue = dice2.getFaceValue();
                     dice1.rollDice();
@@ -139,21 +141,26 @@ public class Game extends JFrame {
                     } else {
                         doubleDiceForPlayer2 = false;
                     }
+                    // Flyttar spelaren
                     player1.move(dicesTotal);
-                    // Om köpt av någon
+
+                    // Uppdaterar knapparnas status beroende på spelarens position ägande av egendom
+                    // Om köpt av någon annan
                     if(Player.ledger.containsKey(player1.getCurrentSquareNumber()) && Player.ledger.get(player1.getCurrentSquareNumber()) != player1.getPlayerNumber()) {
                         btnBuy.setEnabled(false);
                         btnRollDice.setEnabled(false);
                         btnNextTurn.setEnabled(false);
                         btnPayRent.setEnabled(true);
                     }
-                    // Om köpt av någon
+
+                    // Om köpt av spelaren
                     if(Player.ledger.containsKey(player1.getCurrentSquareNumber()) && Player.ledger.get(player1.getCurrentSquareNumber()) == player1.getPlayerNumber()) {
                         btnBuy.setEnabled(false);
                         btnPayRent.setEnabled(false);
                         btnNextTurn.setEnabled(true);
                     }
 
+                    // Om inte är möjligt att köpa
                     if(gameBoard.getUnbuyableSquares().contains(gameBoard.getAllSquares().get(player1.getCurrentSquareNumber()))) {
                         btnBuy.setEnabled(false);
                         btnNextTurn.setEnabled(true);
@@ -164,6 +171,7 @@ public class Game extends JFrame {
                     }
                 } else {
                     // Spelarens 2 tur
+                    // Beräknar summan av antalet prickar
                     int dice1OldValue = dice1.getFaceValue();
                     int dice2OldValue = dice2.getFaceValue();
                     dice1.rollDice();
@@ -174,21 +182,24 @@ public class Game extends JFrame {
                     } else {
                         doubleDiceForPlayer2 = false;
                     }
+                    // Flyttar spelaren
                     player2.move(dicesTotal);
-                    // Om köpt av någon
+                    // Uppdaterar knapparnas status beroende på spelarens position ägande av egendom
+                    // Om köpt av någon annan
                     if(Player.ledger.containsKey(player2.getCurrentSquareNumber()) && Player.ledger.get(player2.getCurrentSquareNumber()) != player2.getPlayerNumber()) {
                         btnBuy.setEnabled(false);
                         btnRollDice.setEnabled(false);
                         btnNextTurn.setEnabled(false);
                         btnPayRent.setEnabled(true);
                     }
-                    // Om köpt av någon
+                    // Om köpt av spelaren själv
                     if(Player.ledger.containsKey(player2.getCurrentSquareNumber()) && Player.ledger.get(player2.getCurrentSquareNumber()) == player2.getPlayerNumber()) {
                         btnBuy.setEnabled(false);
                         btnPayRent.setEnabled(false);
                         btnNextTurn.setEnabled(true);
                     }
 
+                    // Om inte är möjligt att köpa
                     if(gameBoard.getUnbuyableSquares().contains(gameBoard.getAllSquares().get(player2.getCurrentSquareNumber()))) {
                         btnBuy.setEnabled(false);
                         btnNextTurn.setEnabled(true);
@@ -199,34 +210,39 @@ public class Game extends JFrame {
                     }
                 }
 
+                // Inaktiverar knappen som kastar tärning efter kast
                 btnRollDice.setEnabled(false);
+                // Uppdaterar infokonsolen med meddelande beroende på tärningsresultat
                 if(doubleDiceForPlayer1 || doubleDiceForPlayer2) {
                     infoConsole.setText("Klicka nästa tur för att låta spelaren " + (nowPlaying == 0 ? 1 : 2) + " att kasta tärning!");
                 } else {
                     infoConsole.setText("Klicka nästa tur för att låta spelaren " + (nowPlaying == 0 ? 2 : 1) + " att kasta tärning!");
                 }
 
+                // Uppdaterar spelbrädet och spelarens tillgångar
                 layeredPane.remove(gameBoard);
                 layeredPane.add(gameBoard, new Integer(0));
-
                 updatePanelPlayer1TextArea();
                 updatePanelPlayer2TextArea();
             }
         });
 
+        // Placering av knappen som kastar tärning
         btnRollDice.setBounds(81, 413, 246, 53);
         rightPanel.add(btnRollDice);
 
+        // Skapar knappen för nästa tur och hanterar dess händelse
         btnNextTurn = new JButton("Nästa tur");
         btnNextTurn.addActionListener(new ActionListener() {
             @Override
-            // Gör autogenererad metodstub
+            // Aktiverar knappen för att kasta tärning och inaktiverar köp- och betalknapparna för nästa tur
             public void actionPerformed(ActionEvent e) {
                 btnRollDice.setEnabled(true);
                 btnBuy.setEnabled(false);
                 btnPayRent.setEnabled(false);
                 btnNextTurn.setEnabled(false);
 
+                // Hanterar turväxlingen mellan spelare
                 if(nowPlaying == 0 && doubleDiceForPlayer1) {
                     nowPlaying = 0;
                     doubleDiceForPlayer1 = false;
@@ -237,6 +253,7 @@ public class Game extends JFrame {
                     nowPlaying = (nowPlaying + 1) % 2;
                 }
 
+                // Visar spelarinformationen
                 c1.show(playerAssetsPanel, "" + (nowPlaying == 0 ? 1 : 2));
                 updatePanelPlayer1TextArea();
                 updatePanelPlayer2TextArea();
@@ -244,63 +261,77 @@ public class Game extends JFrame {
             }
         });
 
+        // Skapar knappen för nästa tur
         btnNextTurn.setBounds(81, 519, 246, 53);
         rightPanel.add(btnNextTurn);
+        // Inaktiverar knappen för nästa tur vid start
         btnNextTurn.setEnabled(false);
 
+        // Skapar testpanelen
         JPanel test = new JPanel();
         test.setBounds(81, 312, 246, 68);
         rightPanel.add(test);
         test.setLayout(null);
 
+        // Skapar en panel för spelarnas tillgångar
         playerAssetsPanel = new JPanel();
         playerAssetsPanel.setBounds(81, 28, 246, 189);
         rightPanel.add(playerAssetsPanel);
         playerAssetsPanel.setLayout(c1);
 
+        // Skapar en panel för spelare 1
         JPanel panelPlayer1 = new JPanel();
         panelPlayer1.setBackground(Color.RED);
         playerAssetsPanel.add(panelPlayer1, "1");
         panelPlayer1.setLayout(null);
 
+        // Skapar en titel för spelare 1
         JLabel panelPlayer1Title = new JLabel("Spelare 1 All Rikedom");
         panelPlayer1Title.setForeground(Color.white);
         panelPlayer1Title.setHorizontalAlignment(SwingConstants.CENTER);
         panelPlayer1Title.setBounds(0, 6, 240, 16);
         panelPlayer1.add(panelPlayer1Title);
 
+        // Skapar ett textområde för spelare 1
         panelPlayer1TextArea = new JTextArea();
         panelPlayer1TextArea.setBounds(10, 34, 230, 149);
         panelPlayer1.add(panelPlayer1TextArea);
 
+        // Skapar en panel för spelare 2
         JPanel panelPlayer2 = new JPanel();
         panelPlayer2.setBackground(Color.BLUE);
         playerAssetsPanel.add(panelPlayer2, "2");
         panelPlayer2.setLayout(null);
         c1.show(playerAssetsPanel, "" + nowPlaying);
 
+        // Skapar en titel för spelare 2
         JLabel panelPlayer2Title = new JLabel("Spelare 2 All Rikedom");
         panelPlayer2Title.setForeground(Color.white);
         panelPlayer2Title.setHorizontalAlignment(SwingConstants.CENTER);
         panelPlayer2Title.setBounds(0, 6, 240, 16);
         panelPlayer2.add(panelPlayer2Title);
 
+        // Skapar ett textområde för spelare 2
         panelPlayer2TextArea = new JTextArea();
         panelPlayer2TextArea.setBounds(10, 34, 230, 149);
         panelPlayer2.add(panelPlayer2TextArea);
 
+        // Uppdaterar spelarnas tillgångar på panelerna
         updatePanelPlayer1TextArea();
         updatePanelPlayer2TextArea();
 
+        // Skapar infokonsolen för att visa meddelanden
         infoConsole = new JTextArea();
         infoConsole.setColumns(20);
         infoConsole.setRows(5);
         infoConsole.setBounds(6, 6, 234, 56);
         test.add(infoConsole);
         infoConsole.setLineWrap(true);
+        // Visar startmeddelande om att spelare 1 börjar kasta tärning
         infoConsole.setText("Spelare 1 börjar att kasta tärning!");
     }
 
+    // Uppdaterar textområdet med information om spelarens 1 tillgångar
     public void updatePanelPlayer1TextArea() {
         String result = "";
         result += "Aktuellt saldo: " + player1.getWallet() + "\n";
@@ -311,6 +342,7 @@ public class Game extends JFrame {
         panelPlayer1TextArea.setText(result);
     }
 
+    // Uppdaterar textområdet med information om spelarens 2 tillgångar
     public void updatePanelPlayer2TextArea() {
         String result = "";
         result += "Aktuellt saldo: " + player2.getWallet() + "\n";
@@ -321,6 +353,7 @@ public class Game extends JFrame {
         panelPlayer2TextArea.setText(result);
     }
 
+    // Metod för att visa en felruta med meddelande
     public static void errorBox(String infoMessage, String titleBar) {
         JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.ERROR_MESSAGE);
     }
