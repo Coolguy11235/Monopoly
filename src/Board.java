@@ -188,7 +188,6 @@ public class Board extends JPanel {
                 Shape oldshape = g2D.getClip();
                 double x = getWidth()/2.0;
                 double y = getHeight()/2.0;
-                aT.rotate(Math.toRadians(-35), x, y);
                 g2D.setTransform(aT);
                 g2D.setClip(oldshape);
                 super.paintComponent(g);
@@ -199,7 +198,7 @@ public class Board extends JPanel {
         labelMonopoly.setBackground(Color.red);
         labelMonopoly.setOpaque(true);
         labelMonopoly.setHorizontalAlignment(SwingConstants.CENTER);
-        labelMonopoly.setFont(new Font("Times New Roman", Font.PLAIN, 40));
+        labelMonopoly.setFont(new Font("Times New Roman", Font.BOLD, 40));
         labelMonopoly.setBounds(179, 277, 263, 55);
         this.add(labelMonopoly);
     }
