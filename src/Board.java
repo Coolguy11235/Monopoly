@@ -11,18 +11,22 @@ public class Board extends JPanel {
     private ArrayList<Square> unbuyableSquares = new ArrayList<Square>();
 
     // Public metoder:
+    // Hämtar alla rutor på spelbrädet
     public ArrayList<Square> getAllSquares() {
         return allSquares;
     }
 
+    // Hämtar alla oinköpbara rutor på spelbrädet
     public ArrayList<Square> getUnbuyableSquares() {
         return unbuyableSquares;
     }
 
+    // Hämtar rutan vid en specifik position på spelbrädet
     public Square getSquareAtIndex(int location) {
         return allSquares.get(location);
     }
 
+    // Konstruktor som skapar ett spelbräde med specifika dimensioner
     public Board(int xCoord, int yCoord, int width, int height) {
         setBorder(new LineBorder(new Color(0, 0, 0)));
         setBounds(xCoord, yCoord, 612, 612);
@@ -30,6 +34,7 @@ public class Board extends JPanel {
         initializeSquares();
     }
 
+    // Initialiserar alla rutor på spelbrädet
     private void initializeSquares() {
         String[] squareNames = {
                 "Go",
@@ -54,6 +59,7 @@ public class Board extends JPanel {
                 "Instagram"
         };
 
+        // Rutor med specifika namn och positioner (vissa är oinköpbara och andra kan köpas)
         // Rutor på toppen
         Square square0 = new Square(6, 6, 100, 100, squareNames[0], 135);
         this.add(square0);
@@ -180,6 +186,7 @@ public class Board extends JPanel {
         square17.setRentPrice(14);
         square19.setRentPrice(28);
 
+        // Skapar en JLabel för "MONOPOLY" som placeras i mitten av spelbrädet
         JLabel labelMonopoly = new JLabel("MONOPOLY") {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2D = (Graphics2D)g;
@@ -203,6 +210,7 @@ public class Board extends JPanel {
         this.add(labelMonopoly);
     }
 
+    // Låter att rita spelbrädet
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
     }

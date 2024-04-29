@@ -31,7 +31,10 @@ public class Game extends JFrame {
     static int nowPlaying = 0;
 
     // Public metoder:
+    // Konstruktorn för spelet som skapar gränssnittet och spelobjekten
     public Game() {
+
+        // Inställningar för fönstret och layouten
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
         setSize(1080, 720);
@@ -45,10 +48,12 @@ public class Game extends JFrame {
         layeredPane.setBounds(6, 6, 632, 630);
         contentIncluder.add(layeredPane);
 
+        // Skapar spelbräde
         gameBoard = new Board(6, 6, 612, 612);
         gameBoard.setBackground(new Color(51, 255, 153));
         layeredPane.add(gameBoard, new Integer(0));
 
+        // Skapar spelaren
         player1 = new Player(1, Color.RED);
         players.add(player1);
         layeredPane.add(player1, new Integer(1));
@@ -57,6 +62,7 @@ public class Game extends JFrame {
         players.add(player2);
         layeredPane.add(player2, new Integer(1));
 
+        // Skapar högerpanelen för spelinformation
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(Color.LIGHT_GRAY);
         rightPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -64,6 +70,7 @@ public class Game extends JFrame {
         contentIncluder.add(rightPanel);
         rightPanel.setLayout(null);
 
+        // Skapar Knappar
         btnBuy = new JButton("Köp");
         btnBuy.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -78,7 +85,6 @@ public class Game extends JFrame {
                 updatePanelPlayer2TextArea();
             }
         });
-
         btnBuy.setBounds(81, 478, 117, 29);
         rightPanel.add(btnBuy);
         btnBuy.setEnabled(false);
@@ -109,12 +115,14 @@ public class Game extends JFrame {
         rightPanel.add(btnPayRent);
         btnPayRent.setEnabled(false);
 
+        // Skapar tärningar och lägger till dem på spelbrädet
         Dice dice1 = new Dice(244, 406, 40, 40);
         layeredPane.add(dice1, new Integer(1));
 
         Dice dice2 = new Dice(333, 406, 40, 40);
         layeredPane.add(dice2, new Integer(1));
 
+        // Skapar knappen för att kasta tärning, köpa, betala ränta och gå till nästa tur
         btnRollDice = new JButton("Kasta tärning");
         btnRollDice.addActionListener(new ActionListener() {
             @Override

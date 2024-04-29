@@ -15,26 +15,32 @@ public class Square extends JPanel {
     private int rentPrice;
 
     // Public metoder:
+    // Hämtar namnet på rutan
     public String getName() {
         return name;
     }
 
+    // Sätter priset för att köpa rutan
     public void setPrice(int price) {
         this.price = price;
     }
 
+    // Hämtar priset
     public int getPrice() {
         return price;
     }
 
+    // Sätter hyrespriset för rutan
     public void setRentPrice(int rentPrice) {
         this.rentPrice = rentPrice;
     }
 
+    // Hämtar hyrespriset
     public int getRentPrice() {
         return rentPrice;
     }
 
+    // Konstruktor som skapar en ruta med specifika dimensioner och namn
     public Square(int xCoord, int yCoord, int width, int height, String labelString, int rotationDegrees) {
         number = totalSquares;
         totalSquares++;
@@ -43,6 +49,7 @@ public class Square extends JPanel {
         name = labelString;
         this.setLayout(null);
 
+        // Om rotationen är 0 grader skapas en JLabel för namnet
         if(rotationDegrees == 0) {
             nameLabel = new JLabel(labelString);
             nameLabel.setFont(new Font("Times New Roman", Font.PLAIN, 9));
@@ -66,6 +73,7 @@ public class Square extends JPanel {
                 }
             };
 
+            // Anpassar JLabels position beroende på rotationen
             if(rotationDegrees == 90) {
                 nameLabel.setBounds(20, 0, this.getWidth(), this.getHeight());
             }
@@ -89,6 +97,7 @@ public class Square extends JPanel {
 
     }
 
+    // Ritar rutan och färgar den beroende på dess nummer
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
@@ -117,11 +126,13 @@ public class Square extends JPanel {
         }
     }
 
+    // Kontrollerar om hyrar för rutan är betald
     private boolean isRentPaid = false;
     public boolean isRentPaid() {
         return isRentPaid;
     }
 
+    // Sätter om hyran för rutan är betald eller inte
     public void setRentPaid(boolean pay) {
         isRentPaid = pay;
     }

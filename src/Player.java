@@ -18,14 +18,17 @@ public class Player extends JPanel {
     private int wallet = 1500; // Antalet pengar man börjar med
 
     // Public metoder:
+    // Hämtar spelarens nummer
     public int getPlayerNumber() {
         return playerNumber;
     }
 
+    // Hämtar spelarens plånbokssaldo
     public int getWallet() {
         return wallet;
     }
 
+    // Drar ett belopp från spelarens plånbok
     public void withdrawFromWallet(int withdrawAmount) {
         if (withdrawAmount > wallet) {
             //setVisible(false);
@@ -35,23 +38,28 @@ public class Player extends JPanel {
         }
     }
 
+    // Lägger till ett belopp till spelarens plånbok
     public void depositToWallet(int depositAmount) {
         wallet += depositAmount;
         System.out.println("Avlöningsdag för spelaren" + playerNumber + ". Du fick ###$!");
     }
 
+    // Hämtar spelarens nuvarande position på spelbrädet
     public int getCurrentSquareNumber() {
         return currentSquareNumber;
     }
 
+    // Hämtar en lista över de rutor som spelare äger
     public ArrayList<Integer> getTitleDeeds() {
         return titleDeeds;
     }
 
+    // Kontrollerar om spelaren äger en ruta
     public boolean hasTitleDeed(int squareNumber) {
         return titleDeeds.contains(squareNumber) ? true: false;
     }
 
+    // Låter dig att köpa en ruta och lägga till den i spelarens äganderätt
     public void buyTitleDeed(int squareNumber) {
         if(ledger.containsKey(squareNumber)) {
             System.out.println("Det är redan köpt av någon!");
@@ -62,13 +70,14 @@ public class Player extends JPanel {
         }
     }
 
+    // Konstruktor som skapar en spelare med specifika dimensioner och positition
     public Player(int xCoord, int yCoord, int width, int height) {
         setBorder(new LineBorder(new Color(0, 0, 0)));
         setBounds(xCoord, yCoord, 20, 20);
         this.setLayout(null);
     }
 
-    // Autogenererad konstruktor
+    // Konstruktor som skapar en spelare med ett givet nummer och färg
     public Player(int playerNumber, Color color) {
         this.playerNumber = playerNumber;
         this.setBackground(color);
@@ -80,10 +89,12 @@ public class Player extends JPanel {
         totalPlayers++;
     }
 
+    // Ritar spelaren på spelbrädet
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
     }
 
+    // Arrayer som lagrar x- och y-koordinater för spelarens positioner
     int[] xLocationsOfPlayer1 = {31, 131, 231, 331, 431, 531,
                                  531, 531, 531, 531, 531,
                                  431, 331, 231, 131, 31,
@@ -104,6 +115,7 @@ public class Player extends JPanel {
                                  533, 533, 533, 533, 533,
                                  433, 333, 233, 133};
 
+    // Flyttar spelaren på spelbrädet
     public void move(int dicesTotal) {
         if(currentSquareNumber + dicesTotal > 19) {
             depositToWallet(200);
