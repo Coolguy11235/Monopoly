@@ -41,7 +41,7 @@ public class Game extends JFrame {
         contentIncluder.setLayout(null);
 
         JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setBorder(new lineBorder(new Color(0, 0, 0)));
+        layeredPane.setBorder(new LineBorder(new Color(0, 0, 0)));
         layeredPane.setBounds(6, 6, 632, 630);
         contentIncluder.add(layeredPane);
 
