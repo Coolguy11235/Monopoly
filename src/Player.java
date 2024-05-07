@@ -41,7 +41,7 @@ public class Player extends JPanel {
     // Lägger till ett belopp till spelarens plånbok
     public void depositToWallet(int depositAmount) {
         wallet += depositAmount;
-        System.out.println("Avlöningsdag för spelaren" + playerNumber + ". Du fick ###$!");
+        System.out.println("Avlöningsdag för spelaren" + playerNumber + ". Du fick " + depositAmount + "$!");
     }
 
     // Hämtar spelarens nuvarande position på spelbrädet
