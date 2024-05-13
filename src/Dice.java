@@ -62,9 +62,4 @@ public class Dice extends JPanel {
         return faceValue;
     }
 
-    // Konstruktor
-    public Dice(int xCoord, int yCoord, int width, int height, String labelString) {
-        setBorder(new LineBorder(new Color(0, 0, 0)));
-        setBounds(xCoord, yCoord, width, height);
-    }
 }

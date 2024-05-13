@@ -31,7 +31,7 @@ public class Player extends JPanel {
     // Drar ett belopp från spelarens plånbok
     public void withdrawFromWallet(int withdrawAmount) {
         if (withdrawAmount > wallet) {
-            //setVisible(false);
+            setVisible(false);
             System.out.println("Spelaren " + playerNumber + " gick i konkurs!");
         } else {
             wallet -= withdrawAmount;
@@ -140,7 +140,7 @@ public class Player extends JPanel {
         }
     }
 
-    // Genom att jämföra spelarens koordinater enligt Board kvadratnummer
+    // Jämför spelarens koordinater enligt Board kvadratnummer
     public int getCurrentSquareNumberByCoordinates() {
 
         int x = this.getX();
