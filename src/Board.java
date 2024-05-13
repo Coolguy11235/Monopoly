@@ -210,10 +210,5 @@ public class Board extends JPanel {
         this.add(labelMonopoly);
     }
 
-    // Låter att rita spelbrädet
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-    }
-
 
 }
