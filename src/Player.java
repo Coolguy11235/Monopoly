@@ -17,6 +17,18 @@ public class Player extends JPanel {
     private ArrayList<Integer> titleDeeds = new ArrayList<Integer>(); // Rutor som spelaren har
     private int wallet = 1500; // Antalet pengar man börjar med
 
+    // Arrayer som lagrar x- och y-koordinater för spelarens positioner
+    int[] xLocationsOfPlayer1 = {31, 131, 231, 331, 431, 531,
+            531, 531, 531, 531, 531,
+            431, 331, 231, 131, 31,
+            31, 31, 31, 31};
+
+    int[] yLocationsOfPlayer1 = {33, 33, 33, 33, 33, 33,
+            133, 233, 333, 433, 533,
+            533, 533, 533, 533, 533,
+            433, 333, 233, 133};
+
+
     // Public metoder:
     // Hämtar spelarens nummer
     public int getPlayerNumber() {
@@ -94,16 +106,6 @@ public class Player extends JPanel {
         super.paintComponent(g);
     }
 
-    // Arrayer som lagrar x- och y-koordinater för spelarens positioner
-    int[] xLocationsOfPlayer1 = {31, 131, 231, 331, 431, 531,
-            531, 531, 531, 531, 531,
-            431, 331, 231, 131, 31,
-            31, 31, 31, 31};
-
-    int[] yLocationsOfPlayer1 = {33, 33, 33, 33, 33, 33,
-            133, 233, 333, 433, 533,
-            533, 533, 533, 533, 533,
-            433, 333, 233, 133};
 
     // Flyttar spelaren på spelbrädet
     public void move(int dicesTotal) {
