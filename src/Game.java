@@ -22,12 +22,12 @@ public class Game extends JFrame {
     JButton btnPayRent;
     JButton btnBuy;
     JTextArea panelPlayer1TextArea;
-    JTextArea panelPlayer2TextArea;
+    JTextArea panelEnemyTextArea;
     Board gameBoard;
     Player player1;
-    Player player2;
+    Enemy enemy;
     Boolean doubleDiceForPlayer1 = false;
-    Boolean doubleDiceForPlayer2 = false;
+    Boolean doubleDiceForEnemy = false;
     static int nowPlaying = 0;
 
     // Public metoder:
@@ -58,9 +58,9 @@ public class Game extends JFrame {
         players.add(player1);
         layeredPane.add(player1, new Integer(1));
 
-        player2 = new Player(2, Color.BLUE);
-        players.add(player2);
-        layeredPane.add(player2, new Integer(1));
+        enemy = new Enemy(2, Color.BLUE);
+        players.add(enemy);
+        layeredPane.add(enemy, new Integer(1));
 
         // Skapar högerpanelen för spelinformation
         JPanel rightPanel = new JPanel();
@@ -82,7 +82,7 @@ public class Game extends JFrame {
                 currentPlayer.withdrawFromWallet(withdrawAmount);
                 btnBuy.setEnabled(false);
                 updatePanelPlayer1TextArea();
-                updatePanelPlayer2TextArea();
+                updatePanelEnemyTextArea();
             }
         });
         btnBuy.setBounds(81, 478, 117, 29);
@@ -107,7 +107,7 @@ public class Game extends JFrame {
                 btnNextTurn.setEnabled(true);
                 btnPayRent.setEnabled(false);
                 updatePanelPlayer1TextArea();
-                updatePanelPlayer2TextArea();
+                updatePanelEnemyTextArea();
             }
         });
 
@@ -131,15 +131,15 @@ public class Game extends JFrame {
                 // Spelarens 1 tur
                 if(nowPlaying == 0) {
                     // Slår tärningarna och beräknar totala antalet prickar
+                    int dicesTotal = 0;
                     int dice1OldValue = dice1.getFaceValue();
                     int dice2OldValue = dice2.getFaceValue();
                     dice1.rollDice();
-                    dice2.rollDice();
-                    int dicesTotal = dice1.getFaceValue() + dice2.getFaceValue();
+                    dicesTotal = dice1.getFaceValue();
                     if(dice1.getFaceValue() == dice2.getFaceValue()) {
                         doubleDiceForPlayer1 = true;
                     } else {
-                        doubleDiceForPlayer2 = false;
+                        doubleDiceForEnemy = false;
                     }
                     // Flyttar spelaren
                     player1.move(dicesTotal);
@@ -172,38 +172,39 @@ public class Game extends JFrame {
                 } else {
                     // Spelarens 2 tur
                     // Beräknar summan av antalet prickar
+                    int dicesTotal = 0;
                     int dice1OldValue = dice1.getFaceValue();
                     int dice2OldValue = dice2.getFaceValue();
                     dice1.rollDice();
                     dice2.rollDice();
-                    int dicesTotal = dice1.getFaceValue() + dice2.getFaceValue();
+                    dicesTotal = dice1.getFaceValue() + dice2.getFaceValue();
                     if(dice1.getFaceValue() == dice2.getFaceValue()) {
                         doubleDiceForPlayer1 = true;
                     } else {
-                        doubleDiceForPlayer2 = false;
+                        doubleDiceForEnemy = false;
                     }
                     // Flyttar spelaren
-                    player2.move(dicesTotal);
+                    enemy.move(dicesTotal);
                     // Uppdaterar knapparnas status beroende på spelarens position ägande av egendom
                     // Om köpt av någon annan
-                    if(Player.ledger.containsKey(player2.getCurrentSquareNumber()) && Player.ledger.get(player2.getCurrentSquareNumber()) != player2.getPlayerNumber()) {
+                    if(Player.ledger.containsKey(enemy.getCurrentSquareNumber()) && Player.ledger.get(enemy.getCurrentSquareNumber()) != enemy.getPlayerNumber()) {
                         btnBuy.setEnabled(false);
                         btnRollDice.setEnabled(false);
                         btnNextTurn.setEnabled(false);
                         btnPayRent.setEnabled(true);
                     }
                     // Om köpt av spelaren själv
-                    if(Player.ledger.containsKey(player2.getCurrentSquareNumber()) && Player.ledger.get(player2.getCurrentSquareNumber()) == player2.getPlayerNumber()) {
+                    if(Player.ledger.containsKey(enemy.getCurrentSquareNumber()) && Player.ledger.get(enemy.getCurrentSquareNumber()) == enemy.getPlayerNumber()) {
                         btnBuy.setEnabled(false);
                         btnPayRent.setEnabled(false);
                         btnNextTurn.setEnabled(true);
                     }
 
                     // Om inte är möjligt att köpa
-                    if(gameBoard.getUnbuyableSquares().contains(gameBoard.getAllSquares().get(player2.getCurrentSquareNumber()))) {
+                    if(gameBoard.getUnbuyableSquares().contains(gameBoard.getAllSquares().get(enemy.getCurrentSquareNumber()))) {
                         btnBuy.setEnabled(false);
                         btnNextTurn.setEnabled(true);
-                    } else if (!Player.ledger.containsKey(player2.getCurrentSquareNumber())) { // Om inte köpt av någon
+                    } else if (!Player.ledger.containsKey(enemy.getCurrentSquareNumber())) { // Om inte köpt av någon
                         btnBuy.setEnabled(true);
                         btnNextTurn.setEnabled(true);
                         btnPayRent.setEnabled(false);
@@ -213,17 +214,17 @@ public class Game extends JFrame {
                 // Inaktiverar knappen som kastar tärning efter kast
                 btnRollDice.setEnabled(false);
                 // Uppdaterar infokonsolen med meddelande beroende på tärningsresultat
-                if(doubleDiceForPlayer1 || doubleDiceForPlayer2) {
+                if(doubleDiceForPlayer1 || doubleDiceForEnemy) {
                     infoConsole.setText("Klicka nästa tur för att låta spelaren " + (nowPlaying == 0 ? 1 : 2) + " att kasta tärning!");
                 } else {
-                    infoConsole.setText("Klicka nästa tur för att låta spelaren " + (nowPlaying == 0 ? 2 : 1) + " att kasta tärning!");
+                    infoConsole.setText("Klicka nästa tur för att låta fienden " + (nowPlaying == 0 ? 2 : 1) + " att kasta tärning!");
                 }
 
                 // Uppdaterar spelbrädet och spelarens tillgångar
                 layeredPane.remove(gameBoard);
                 layeredPane.add(gameBoard, new Integer(0));
                 updatePanelPlayer1TextArea();
-                updatePanelPlayer2TextArea();
+                updatePanelEnemyTextArea();
             }
         });
 
@@ -246,17 +247,17 @@ public class Game extends JFrame {
                 if(nowPlaying == 0 && doubleDiceForPlayer1) {
                     nowPlaying = 0;
                     doubleDiceForPlayer1 = false;
-                } else if(nowPlaying == 1 && doubleDiceForPlayer2) {
+                } else if(nowPlaying == 1 && doubleDiceForEnemy) {
                     nowPlaying = 1;
-                    doubleDiceForPlayer2 = false;
-                } else if(!doubleDiceForPlayer1 && !doubleDiceForPlayer2) {
+                    doubleDiceForEnemy = false;
+                } else if(!doubleDiceForPlayer1 && !doubleDiceForEnemy) {
                     nowPlaying = (nowPlaying + 1) % 2;
                 }
 
                 // Visar spelarinformationen
                 c1.show(playerAssetsPanel, "" + (nowPlaying == 0 ? 1 : 2));
                 updatePanelPlayer1TextArea();
-                updatePanelPlayer2TextArea();
+                updatePanelEnemyTextArea();
                 infoConsole.setText("Det är nu spelarens " + (nowPlaying == 0 ? 1 : 2) + " tur!");
             }
         });
@@ -297,28 +298,28 @@ public class Game extends JFrame {
         panelPlayer1TextArea.setBounds(10, 34, 230, 149);
         panelPlayer1.add(panelPlayer1TextArea);
 
-        // Skapar en panel för spelare 2
-        JPanel panelPlayer2 = new JPanel();
-        panelPlayer2.setBackground(Color.BLUE);
-        playerAssetsPanel.add(panelPlayer2, "2");
-        panelPlayer2.setLayout(null);
+        // Skapar en panel för fienden
+        JPanel panelEnemy = new JPanel();
+        panelEnemy.setBackground(Color.BLUE);
+        playerAssetsPanel.add(panelEnemy, "2");
+        panelEnemy.setLayout(null);
         c1.show(playerAssetsPanel, "" + nowPlaying);
 
-        // Skapar en titel för spelare 2
-        JLabel panelPlayer2Title = new JLabel("Spelare 2 All Rikedom");
-        panelPlayer2Title.setForeground(Color.white);
-        panelPlayer2Title.setHorizontalAlignment(SwingConstants.CENTER);
-        panelPlayer2Title.setBounds(0, 6, 240, 16);
-        panelPlayer2.add(panelPlayer2Title);
+        // Skapar en titel för fienden
+        JLabel panelEnemyTitle = new JLabel("Fiende All Rikedom");
+        panelEnemyTitle.setForeground(Color.white);
+        panelEnemyTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        panelEnemyTitle.setBounds(0, 6, 240, 16);
+        panelEnemy.add(panelEnemyTitle);
 
-        // Skapar ett textområde för spelare 2
-        panelPlayer2TextArea = new JTextArea();
-        panelPlayer2TextArea.setBounds(10, 34, 230, 149);
-        panelPlayer2.add(panelPlayer2TextArea);
+        // Skapar ett textområde för fienden
+        panelEnemyTextArea = new JTextArea();
+        panelEnemyTextArea.setBounds(10, 34, 230, 149);
+        panelEnemy.add(panelEnemyTextArea);
 
         // Uppdaterar spelarnas tillgångar på panelerna
         updatePanelPlayer1TextArea();
-        updatePanelPlayer2TextArea();
+        updatePanelEnemyTextArea();
 
         // Skapar infokonsolen för att visa meddelanden
         infoConsole = new JTextArea();
@@ -342,15 +343,15 @@ public class Game extends JFrame {
         panelPlayer1TextArea.setText(result);
     }
 
-    // Uppdaterar textområdet med information om spelarens 2 tillgångar
-    public void updatePanelPlayer2TextArea() {
+    // Uppdaterar textområdet med information om fiendens tillgångar
+    public void updatePanelEnemyTextArea() {
         String result = "";
-        result += "Aktuellt saldo: " + player2.getWallet() + "\n";
+        result += "Aktuellt saldo: " + enemy.getWallet() + "\n";
         result += "Lagfart: \n";
-        for(int i = 0; i < player2.getTitleDeeds().size(); i++) {
-            result += " - " + gameBoard.getAllSquares().get(player2.getTitleDeeds().get(i)).getName() + "\n";
+        for(int i = 0; i < enemy.getTitleDeeds().size(); i++) {
+            result += " - " + gameBoard.getAllSquares().get(enemy.getTitleDeeds().get(i)).getName() + "\n";
         }
-        panelPlayer2TextArea.setText(result);
+        panelEnemyTextArea.setText(result);
     }
 
     // Metod för att visa en felruta med meddelande

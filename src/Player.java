@@ -13,7 +13,7 @@ public class Player extends JPanel {
     static int totalPlayers = 0;
     static HashMap<Integer, Integer> ledger = new HashMap<>();
 
-    private int currentSquareNumber = 0; // Var spelaren befinner sig (0 - 19)
+    protected int currentSquareNumber = 0; // Var spelaren befinner sig (0 - 19)
     private ArrayList<Integer> titleDeeds = new ArrayList<Integer>(); // Rutor som spelaren har
     private int wallet = 1500; // Antalet pengar man börjar med
 
@@ -96,24 +96,14 @@ public class Player extends JPanel {
 
     // Arrayer som lagrar x- och y-koordinater för spelarens positioner
     int[] xLocationsOfPlayer1 = {31, 131, 231, 331, 431, 531,
-                                 531, 531, 531, 531, 531,
-                                 431, 331, 231, 131, 31,
-                                 31, 31, 31, 31};
+            531, 531, 531, 531, 531,
+            431, 331, 231, 131, 31,
+            31, 31, 31, 31};
 
     int[] yLocationsOfPlayer1 = {33, 33, 33, 33, 33, 33,
-                                 133, 233, 333, 433, 533,
-                                 533, 533, 533, 533, 533,
-                                 433, 333, 233, 133};
-
-    int[] xLocationsOfPlayer2 = {61, 191, 291, 361, 461, 561,
-                                 561, 561, 561, 561, 561,
-                                 461, 361, 261, 161, 61,
-                                 61, 61, 61, 61};
-
-    int[] yLocationsOfPlayer2 = {33, 33, 33, 33, 33, 33,
-                                 133, 233, 333, 433, 533,
-                                 533, 533, 533, 533, 533,
-                                 433, 333, 233, 133};
+            133, 233, 333, 433, 533,
+            533, 533, 533, 533, 533,
+            433, 333, 233, 133};
 
     // Flyttar spelaren på spelbrädet
     public void move(int dicesTotal) {
@@ -127,14 +117,10 @@ public class Player extends JPanel {
         int targetSquare = (currentSquareNumber + dicesTotal) % 20;
         currentSquareNumber = targetSquare;
 
-        // Flyttar spelaren till den nya målrutan baserat på vilken spelare som spelar
-        if(Game.nowPlaying == 0) {
-            this.setLocation(xLocationsOfPlayer1[targetSquare], yLocationsOfPlayer1[targetSquare]);
-        } else {
-            this.setLocation(xLocationsOfPlayer2[targetSquare], yLocationsOfPlayer2[targetSquare]);
-        }
+        // Flyttar spelaren till den nya målrutan baserat
+        this.setLocation(xLocationsOfPlayer1[targetSquare], yLocationsOfPlayer1[targetSquare]);
 
-        // Uppdaterar informationen i infokonsolen om den nya rutan tillhör en anna spelare
+        // Uppdaterar informationen i infokonsolen om den nya rutan tillhör en annan spelare eller fiende
         if(ledger.containsKey(this.getCurrentSquareNumber())) {
             Game.infoConsole.setText("Denna egenskap tillhör spelaren " + ledger.get(this.getCurrentSquareNumber()));
         }
@@ -198,6 +184,6 @@ public class Player extends JPanel {
             } else {
                 return 10;
             }
-    }
+        }
     }
 }
